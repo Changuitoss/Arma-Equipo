@@ -8,18 +8,17 @@ import PlayerNameForm from './PlayerNameForm';
 class Futbol extends Component {
 
   state = {
-    value: [],
+    value: "",
     list: [],
     teamA: [],
     teamB: []
   }
 
-  handleNameChange = (e) => {
-    const nombre = e.target.value;
-    this.setState({ value: nombre })    
+  handleNameChange = (nombre) => {
+    this.setState({ value: nombre })
   }
 
-  handleNameSubmit = (e) => {
+  handleSubmit = (e, nombre) => {
     const list = [...this.state.list];
 
     list.push(this.state.value)
@@ -29,14 +28,29 @@ class Futbol extends Component {
     e.preventDefault();    
   }
 
-  addTeamA = (name, e) => {
-    const teamA = this.state.teamA;
-    const list = this.state.list;
+  addTeam = (e) => {
+    const list = [...this.state.list];
+    const name = e.target.name;
+    const teamName = e.target.attributes.teamname.value;
 
-    teamA.push(name);
-    list.splice(name, 1);
-    
-    this.setState({ teamA, list });
+    if (teamName === "a") {
+      const team = [...this.state.teamA];
+      team.push(name);
+      list.splice(name, 1);
+      this.setState({ teamA: team, list });
+    } else {
+      const team = [...this.state.teamB]
+      team.push(name);
+      list.splice(name, 1);
+      this.setState({ teamB: team, list });
+    }  
+  }
+
+  removeTeam = (e) => {
+    const name = e.target.name;
+    const team = e.target.team;
+    const teamState = [...this.state.t]
+
   }
 
 
@@ -45,16 +59,14 @@ class Futbol extends Component {
       <div className="futbol-container">
         <h1 className="sport-title">Futbol</h1>
         <NumPlayersForm />   
-        <PlayerNameForm value={this.state.value} handleNameChange={this.handleNameChange} handleNameSubmit={this.handleNameSubmit}/>
+        <PlayerNameForm value={this.state.value} handleNameChange={this.handleNameChange} handleSubmit={this.handleSubmit}/>
         <ul>
           <PlayerList list={this.state.list} addTeam={this.addTeam}/>
         </ul>
-        <ul>
-          <Equipo addTeamA={this.addTeamA}/>
-        </ul>
-        <ul>
-          <Equipo />
-        </ul>
+          <h4>Equipo A</h4>
+          <Equipo team={this.state.teamA} removeTeam={this.removeFromTeam}/>
+          <h4>Equipo B</h4>
+          <Equipo team={this.state.teamB} removeTeam={this.removeFromTeam}/>
       </div>
     );
   } 
