@@ -6,7 +6,7 @@ function PlayerList(props) {
                                         {name}
                                         <button onClick={props.addTeam} name={name} teamname="a">a</button>
                                         <button onClick={props.addTeam} name={name} teamname="b">b</button>
-                                        <button name={name}>x</button>
+                                        <button name={name} onClick={props.removeFromList}>x</button>
                                       </li>
                           )
 

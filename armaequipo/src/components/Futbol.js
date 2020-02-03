@@ -18,7 +18,7 @@ class Futbol extends Component {
     this.setState({ value: nombre })
   }
 
-  handleSubmit = (e, nombre) => {
+  handleSubmit = (e) => {
     const list = [...this.state.list];
 
     list.push(this.state.value)
@@ -36,21 +36,37 @@ class Futbol extends Component {
     if (teamName === "a") {
       const team = [...this.state.teamA];
       team.push(name);
-      list.splice(name, 1);
+      list.splice(list.indexOf(name), 1);
       this.setState({ teamA: team, list });
     } else {
       const team = [...this.state.teamB]
       team.push(name);
-      list.splice(name, 1);
+      list.splice(list.indexOf(name), 1);
       this.setState({ teamB: team, list });
     }  
   }
 
-  removeTeam = (e) => {
+  removeFromList = (e) => {
+    const list = [...this.state.list];
     const name = e.target.name;
-    const team = e.target.team;
-    const teamState = [...this.state.t]
 
+    list.splice(list.indexOf(name), 1);
+
+    this.setState({ list })
+  }
+
+  removeFromTeam = (e) => {
+    const name = e.target.name;
+    const team = e.target.attributes.teamname.value;
+
+    const teamState = [...this.state[team]];
+    const list = [...this.state.list]; 
+
+    teamState.splice(teamState.indexOf(name), 1);
+    list.push(name);
+
+    this.setState({ [team]: teamState}, () => {this.setState({ list })}); 
+  
   }
 
 
@@ -61,12 +77,12 @@ class Futbol extends Component {
         <NumPlayersForm />   
         <PlayerNameForm value={this.state.value} handleNameChange={this.handleNameChange} handleSubmit={this.handleSubmit}/>
         <ul>
-          <PlayerList list={this.state.list} addTeam={this.addTeam}/>
+          <PlayerList list={this.state.list} addTeam={this.addTeam} removeFromList={this.removeFromList}/>
         </ul>
           <h4>Equipo A</h4>
-          <Equipo team={this.state.teamA} removeTeam={this.removeFromTeam}/>
+          <Equipo team={this.state.teamA} teamName="teamA" removeFromTeam={this.removeFromTeam}/>
           <h4>Equipo B</h4>
-          <Equipo team={this.state.teamB} removeTeam={this.removeFromTeam}/>
+          <Equipo team={this.state.teamB} teamName="teamB" removeFromTeam={this.removeFromTeam}/>
       </div>
     );
   } 
