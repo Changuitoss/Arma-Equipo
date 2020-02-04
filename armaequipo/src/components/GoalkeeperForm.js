@@ -7,7 +7,10 @@ class GoalkeeperForm extends Component {
     return (
       <form>
         <label>Arquero fijo?</label>
-        <input type="checkbox" name={goalkeepername} onChange={this.props.handleGoalKeeperState}></input>
+        <input  type="checkbox" 
+                name={goalkeepername} 
+                onChange={this.props.handleGoalKeeperState}>
+        </input>
       </form>
     )}    
 }

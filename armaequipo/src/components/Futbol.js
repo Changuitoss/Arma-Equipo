@@ -12,7 +12,8 @@ class Futbol extends Component {
     list: [],
     teamA: [],
     teamB: [],
-    goalkeeperA: false,
+    goalkeeperA: "",
+    goalkeeperB: ""
   }
 
   handleNameChange = (nombre) => {
@@ -74,25 +75,60 @@ class Futbol extends Component {
     this.setState({ [goalkeeperTeam]: e.target.checked });  //changes goalkeeperA state to True if checked.
   }
 
+  handleGoalKeeperSelect = (e) => {
+    const teamName = e.target.attributes.teamname.value;
+    const team = [...this.state[teamName]];
+    const playerName = e.target.name;
+
+
+    const gkFirst = team.sort(player => {
+      return player === playerName ? -1 : 1
+    })
+
+    e.target.style.display
+    this.setState({ [teamName]: gkFirst })
+
+  }
+
 
   render() {
     return (
       <div className="futbol-container">
         <h1 className="sport-title">Futbol</h1>
-        <NumPlayersForm />   
-        <PlayerNameForm value={this.state.value} handleNameChange={this.handleNameChange} handleSubmit={this.handleSubmit}/>
+        <NumPlayersForm />  
+
+        <PlayerNameForm value={this.state.value} 
+                        handleNameChange={this.handleNameChange} 
+                        handleSubmit={this.handleSubmit}
+        />
+
         <ul>
-          <PlayerList list={this.state.list} addTeam={this.addTeam} removeFromList={this.removeFromList}/>
+          <PlayerList list={this.state.list} 
+                      addTeam={this.addTeam} 
+                      removeFromList={this.removeFromList}
+          />
         </ul>
-          <h4>Equipo A</h4>  
-          <GoalkeeperForm handleGoalKeeperState={this.handleGoalKeeperState} goalkeepername="goalkeeperA"/>
 
-          <Equipo team={this.state.teamA} teamName="teamA" removeFromTeam={this.removeFromTeam} gkState={this.state.goalkeeperA}/>
+        <h4>Equipo A</h4>  
+        <GoalkeeperForm handleGoalKeeperState={this.handleGoalKeeperState} 
+                        goalkeepername="goalkeeperA"
+        />                
+        <Equipo team={this.state.teamA} 
+                teamName="teamA" 
+                removeFromTeam={this.removeFromTeam} 
+                gkState={this.state.goalkeeperA}
+                handleGoalKeeperSelect={this.handleGoalKeeperSelect}
+        />
 
-
-
-          <h4>Equipo B</h4>  <GoalkeeperForm />
-          <Equipo team={this.state.teamB} teamName="teamB" removeFromTeam={this.removeFromTeam}/>
+        <h4>Equipo B</h4>  
+        <GoalkeeperForm handleGoalKeeperState={this.handleGoalKeeperState} 
+                        goalkeepername="goalkeeperB"
+        />
+        <Equipo team={this.state.teamB} 
+                teamName="teamB" 
+                removeFromTeam={this.removeFromTeam} 
+                gkState={this.state.goalkeeperB}
+        />
       </div>
     );
   } 
