@@ -1,9 +1,9 @@
-import React from 'react';
-import { Component } from 'react';
+import React, { Component } from 'react';
 import Equipo from './Equipo';
 import PlayerList from './PlayerList';
 import NumPlayersForm from './NumPlayersForm';
 import PlayerNameForm from './PlayerNameForm';
+import GoalkeeperForm from './GoalkeeperForm';
  
 class Futbol extends Component {
 
@@ -11,7 +11,8 @@ class Futbol extends Component {
     value: "",
     list: [],
     teamA: [],
-    teamB: []
+    teamB: [],
+    goalkeeperA: false,
   }
 
   handleNameChange = (nombre) => {
@@ -66,7 +67,11 @@ class Futbol extends Component {
     list.push(name);
 
     this.setState({ [team]: teamState}, () => {this.setState({ list })}); 
-  
+  }
+
+  handleGoalKeeperState = (e) => {
+    const goalkeeperTeam = e.target.attributes.name.value;
+    this.setState({ [goalkeeperTeam]: e.target.checked });  //changes goalkeeperA state to True if checked.
   }
 
 
@@ -79,9 +84,14 @@ class Futbol extends Component {
         <ul>
           <PlayerList list={this.state.list} addTeam={this.addTeam} removeFromList={this.removeFromList}/>
         </ul>
-          <h4>Equipo A</h4>
-          <Equipo team={this.state.teamA} teamName="teamA" removeFromTeam={this.removeFromTeam}/>
-          <h4>Equipo B</h4>
+          <h4>Equipo A</h4>  
+          <GoalkeeperForm handleGoalKeeperState={this.handleGoalKeeperState} goalkeepername="goalkeeperA"/>
+
+          <Equipo team={this.state.teamA} teamName="teamA" removeFromTeam={this.removeFromTeam} gkState={this.state.goalkeeperA}/>
+
+
+
+          <h4>Equipo B</h4>  <GoalkeeperForm />
           <Equipo team={this.state.teamB} teamName="teamB" removeFromTeam={this.removeFromTeam}/>
       </div>
     );

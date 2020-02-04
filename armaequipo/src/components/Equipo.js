@@ -4,6 +4,8 @@ class Equipo extends Component {
   render() {
     const team = this.props.team;
     const teamName= this.props.teamName;
+    const gkState = this.props.gkState;
+
     const teamItems = team.map(name => 
       <li key={name}>
         {name}
