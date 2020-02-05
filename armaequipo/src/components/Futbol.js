@@ -34,17 +34,17 @@ class Futbol extends Component {
     const list = [...this.state.list];
     const name = e.target.name;
     const teamName = e.target.attributes.teamname.value;
-
+  
     if (teamName === "a") {
       const team = [...this.state.teamA];
       team.push(name);
       list.splice(list.indexOf(name), 1);
-      this.setState({ teamA: team, list });
+      this.setState({ teamA: team, list }, this.gkBtnCheck);
     } else {
       const team = [...this.state.teamB]
       team.push(name);
       list.splice(list.indexOf(name), 1);
-      this.setState({ teamB: team, list });
+      this.setState({ teamB: team, list }, this.gkBtnCheck);
     }  
   }
 
@@ -80,16 +80,20 @@ class Futbol extends Component {
     const team = [...this.state[teamName]];
     const playerName = e.target.name;
 
-
     const gkFirst = team.sort(player => {
       return player === playerName ? -1 : 1
     })
 
-    e.target.style.display
-    this.setState({ [teamName]: gkFirst })
-
+    this.setState({ [teamName]: gkFirst }, this.gkBtnCheck)
   }
 
+  gkBtnCheck = () => {  //Checks for the players that were not selected as goalkeeper, and aplyies a "display: none" styled class.
+    const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
+      for(var i = 1; i <= gkBtnList.length - 1; i++) {
+        if (!gkBtnList[i].classList.contains('gkNoDisplay'))
+        gkBtnList[i].classList.add("gkNoDisplay");
+      }
+  }
 
   render() {
     return (

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './Equipo.css';
 
 class Equipo extends Component {
   render() {
@@ -23,7 +24,9 @@ class Equipo extends Component {
           {name}
           <button onClick={this.props.handleGoalKeeperSelect}
                   teamname={teamName}
-                  name={name}>
+                  name={name}
+                  className="gk-btn">
+                  
             arquero
           </button>
           <button onClick={this.props.removeFromTeam} 
