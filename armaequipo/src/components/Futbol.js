@@ -40,7 +40,7 @@ class Futbol extends Component {
       const team = [...this.state.teamA];
       team.push(name);
       list.splice(list.indexOf(name), 1);
-      this.setState({ teamA: team, list }, () => this.addPlayerGKBtnCheck(team, gkState));
+      this.setState({ teamA: team, list }, () => this.addPlayerGKBtnCheck(gkState));
     } else {
       const team = [...this.state.teamB]
       team.push(name);
@@ -88,6 +88,17 @@ class Futbol extends Component {
     const teamName = e.target.attributes.teamname.value;
     const team = [...this.state[teamName]];
     const playerName = e.target.name;
+    const gkNoDisplayList = Array.from(document.querySelectorAll('.gkNoDisplay'));
+    const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
+    
+    if(gkBtnList[0].attributes.name.value === playerName && gkNoDisplayList.length > 0) { 
+      for(var i = 1; i <= gkBtnList.length - 1; i++) {
+         gkBtnList[i].classList.remove("gkNoDisplay");
+      }
+      return;
+    }
+    
+ 
 
     const gkFirst = team.sort(player => {
       return player === playerName ? -1 : 1
@@ -96,10 +107,9 @@ class Futbol extends Component {
     this.setState({ [teamName]: gkFirst }, this.gkBtnCheck)
   }
 
-  addPlayerGKBtnCheck = (team, gkState) => {  
+  addPlayerGKBtnCheck = (gkState) => {  
     const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
     const gkNoDisplayList = Array.from(document.querySelectorAll('.gkNoDisplay'));
-    console.log('gkbtnlist: ', gkBtnList);
     
     if(gkState && gkNoDisplayList.length === 1) {
       for (var i = 1; i <= gkBtnList.length - 1; i++) {
@@ -110,7 +120,6 @@ class Futbol extends Component {
 
   removePlayerGKBtnCheck = (name, gkState) => {  
     const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
-    const gkNoDisplayList = Array.from(document.querySelectorAll('.gkNoDisplay'));
 
     if (gkState && name === gkBtnList[0].attributes.name.value) {
       gkBtnList.forEach(player => player.classList.remove('gkNoDisplay'));
