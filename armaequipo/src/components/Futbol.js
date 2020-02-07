@@ -36,10 +36,11 @@ class Futbol extends Component {
     const teamName = e.target.attributes.teamname.value;
   
     if (teamName === "a") {
+      const gkState = this.state.goalkeeperA;
       const team = [...this.state.teamA];
       team.push(name);
       list.splice(list.indexOf(name), 1);
-      this.setState({ teamA: team, list }, this.gkBtnCheck);
+      this.setState({ teamA: team, list }, () => this.addPlayerGKBtnCheck(team, gkState));
     } else {
       const team = [...this.state.teamB]
       team.push(name);
@@ -63,6 +64,14 @@ class Futbol extends Component {
 
     const teamState = [...this.state[team]];
     const list = [...this.state.list]; 
+    
+    if(team === "teamA") {
+      const gkState = this.state.goalkeeperA;
+      this.removePlayerGKBtnCheck(name, gkState);
+    } else if (team === "teamB") {
+        const gkState = this.state.goalkeeperB;
+        this.removePlayerGKBtnCheck(name, gkState);
+    }
 
     teamState.splice(teamState.indexOf(name), 1);
     list.push(name);
@@ -79,7 +88,6 @@ class Futbol extends Component {
     const teamName = e.target.attributes.teamname.value;
     const team = [...this.state[teamName]];
     const playerName = e.target.name;
-    const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
 
     const gkFirst = team.sort(player => {
       return player === playerName ? -1 : 1
@@ -88,13 +96,34 @@ class Futbol extends Component {
     this.setState({ [teamName]: gkFirst }, this.gkBtnCheck)
   }
 
+  addPlayerGKBtnCheck = (team, gkState) => {  
+    const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
+    const gkNoDisplayList = Array.from(document.querySelectorAll('.gkNoDisplay'));
+    console.log('gkbtnlist: ', gkBtnList);
+    
+    if(gkState && gkNoDisplayList.length === 1) {
+      for (var i = 1; i <= gkBtnList.length - 1; i++) {
+        gkBtnList[i].classList.add('gkNoDisplay');
+      }
+    } 
+  }
+
+  removePlayerGKBtnCheck = (name, gkState) => {  
+    const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
+    const gkNoDisplayList = Array.from(document.querySelectorAll('.gkNoDisplay'));
+
+    if (gkState && name === gkBtnList[0].attributes.name.value) {
+      gkBtnList.forEach(player => player.classList.remove('gkNoDisplay'));
+    }
+  }
+
+
   gkBtnCheck = () => {  //Checks for the players that were not selected as goalkeeper, and aplyies a "display: none" styled class.
     const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
     const gkNoDisplayList = Array.from(document.querySelectorAll('.gkNoDisplay'));
-    
+
     for(var i = 1; i <= gkBtnList.length - 1; i++) {
       if (gkNoDisplayList.length === 0) {
-        console.log(gkNoDisplayList.length)
         gkBtnList[i].classList.add("gkNoDisplay");
       }
       else if(!gkNoDisplayList[0].classList.contains('gkNoDisplay')) {
