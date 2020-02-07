@@ -1,0 +1,7 @@
+.futbol-container {
+  margin: 1rem;
+}
+
+.equipos {
+  display: flex;
+}
