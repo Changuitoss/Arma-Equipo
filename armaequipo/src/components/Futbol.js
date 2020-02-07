@@ -79,6 +79,7 @@ class Futbol extends Component {
     const teamName = e.target.attributes.teamname.value;
     const team = [...this.state[teamName]];
     const playerName = e.target.name;
+    const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
 
     const gkFirst = team.sort(player => {
       return player === playerName ? -1 : 1
@@ -89,10 +90,17 @@ class Futbol extends Component {
 
   gkBtnCheck = () => {  //Checks for the players that were not selected as goalkeeper, and aplyies a "display: none" styled class.
     const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
-      for(var i = 1; i <= gkBtnList.length - 1; i++) {
-        if (!gkBtnList[i].classList.contains('gkNoDisplay'))
+    const gkNoDisplayList = Array.from(document.querySelectorAll('.gkNoDisplay'));
+    
+    for(var i = 1; i <= gkBtnList.length - 1; i++) {
+      if (gkNoDisplayList.length === 0) {
+        console.log(gkNoDisplayList.length)
         gkBtnList[i].classList.add("gkNoDisplay");
       }
+      else if(!gkNoDisplayList[0].classList.contains('gkNoDisplay')) {
+        gkBtnList[i].classList.remove("gkNoDisplay");
+      } 
+    } 
   }
 
   render() {
