@@ -13,6 +13,7 @@ class Futbol extends Component {
     list: [],
     teamA: [],
     teamB: [],
+    suplentes: [],
     goalkeeperA: "",
     goalkeeperB: ""
   }
@@ -43,10 +44,11 @@ class Futbol extends Component {
       list.splice(list.indexOf(name), 1);
       this.setState({ teamA: team, list }, () => this.addPlayerGKBtnCheck(gkState));
     } else {
-      const team = [...this.state.teamB]
+      const gkState = this.state.goalkeeperB;
+      const team = [...this.state.teamB];
       team.push(name);
       list.splice(list.indexOf(name), 1);
-      this.setState({ teamB: team, list }, this.gkBtnCheck);
+      this.setState({ teamB: team, list }, () => this.addPlayerGKBtnCheck(gkState));
     }  
   }
 
@@ -174,7 +176,7 @@ class Futbol extends Component {
           </div>
           
           <div className="equipoB">
-            <h4>Equipo B</h4>  
+            <h4>Equipo B</h4> 
             <GoalkeeperForm handleGoalKeeperState={this.handleGoalKeeperState} 
                             goalkeepername="goalkeeperB"
             />
@@ -182,6 +184,15 @@ class Futbol extends Component {
                     teamName="teamB" 
                     removeFromTeam={this.removeFromTeam} 
                     gkState={this.state.goalkeeperB}
+                    handleGoalKeeperSelect={this.handleGoalKeeperSelect}
+            />
+          </div>
+
+          <div className="suplentes">
+            <h4>Suplentes</h4> 
+            <Equipo team={this.state.suplentes} 
+                    teamName="suplentes" 
+                    removeFromTeam={this.removeFromTeam} 
             />
           </div>
         </div>
