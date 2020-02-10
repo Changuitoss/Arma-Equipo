@@ -4,6 +4,7 @@ import PlayerList from './PlayerList';
 import NumPlayersForm from './NumPlayersForm';
 import PlayerNameForm from './PlayerNameForm';
 import GoalkeeperForm from './GoalkeeperForm';
+import PlayersRemaining from './PlayersRemaining';
 import './Futbol.css';
  
 class Futbol extends Component {
@@ -11,6 +12,7 @@ class Futbol extends Component {
   state = {
     value: "",
     list: [],
+    numPlayers: 0,
     teamA: [],
     teamB: [],
     suplentes: [],
@@ -144,11 +146,21 @@ class Futbol extends Component {
     } 
   }
 
+  handlePlayerNum = (e) => {
+    console.log(e.target.value)
+    let numPlayers = this.state.numPlayers;
+    numPlayers = Number(e.target.value);
+
+    this.setState({ numPlayers });
+
+    e.preventDefault();
+  }
+
   render() {
     return (
       <div className="futbol-container">
         <h1 className="sport-title">Futbol</h1>
-        <NumPlayersForm />  
+        <NumPlayersForm handlePlayerNum={this.handlePlayerNum}/>  
 
         <PlayerNameForm value={this.state.value} 
                         handleNameChange={this.handleNameChange} 
@@ -167,12 +179,13 @@ class Futbol extends Component {
             <GoalkeeperForm handleGoalKeeperState={this.handleGoalKeeperState} 
                             goalkeepername="goalkeeperA"
             />                
-            <Equipo team={this.state.teamA} 
+            <Equipo team={this.state.teamA}   
                     teamName="teamA" 
                     removeFromTeam={this.removeFromTeam} 
                     gkState={this.state.goalkeeperA}
                     handleGoalKeeperSelect={this.handleGoalKeeperSelect}
             />
+            <PlayersRemaining totalPlayers={this.state.numPlayers} currentPlayers={this.state.teamA}/>
           </div>
           
           <div className="equipoB">
@@ -186,6 +199,7 @@ class Futbol extends Component {
                     gkState={this.state.goalkeeperB}
                     handleGoalKeeperSelect={this.handleGoalKeeperSelect}
             />
+            <PlayersRemaining totalPlayers={this.state.numPlayers} currentPlayers={this.state.teamB}/>
           </div>
 
           <div className="suplentes">

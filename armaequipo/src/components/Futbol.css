@@ -1,7 +1,9 @@
 .futbol-container {
   margin: 1rem;
+  display: grid;
 }
 
 .equipos {
   display: flex;
+  justify-content: space-around;
 }

@@ -37,16 +37,14 @@ class Equipo extends Component {
         </li>);
     }
 
-
     return (
         <div>
           <ul>
             {teamItems}
           </ul>
-        </div>
-
-        
-    )}    
+        </div>        
+    )
+  }
 }
 
 export default Equipo;
