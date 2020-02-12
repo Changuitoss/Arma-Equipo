@@ -39,18 +39,18 @@ class Futbol extends Component {
     const name = e.target.name;
     const teamName = e.target.attributes.teamname.value;
   
-    if (teamName === "a") {
+    if (teamName === "teamA") {
       const gkState = this.state.goalkeeperA;
       const team = [...this.state.teamA];
       team.push(name);
       list.splice(list.indexOf(name), 1);
-      this.setState({ teamA: team, list }, () => this.addPlayerGKBtnCheck(gkState));
+      this.setState({ teamA: team, list }, () => this.addPlayerGKBtnCheck(gkState, teamName));
     } else {
       const gkState = this.state.goalkeeperB;
       const team = [...this.state.teamB];
       team.push(name);
       list.splice(list.indexOf(name), 1);
-      this.setState({ teamB: team, list }, () => this.addPlayerGKBtnCheck(gkState));
+      this.setState({ teamB: team, list }, () => this.addPlayerGKBtnCheck(gkState, teamName));
     }  
   }
 
@@ -65,23 +65,23 @@ class Futbol extends Component {
 
   removeFromTeam = (e) => {
     const name = e.target.name;
-    const team = e.target.attributes.teamname.value;
+    const teamName = e.target.attributes.teamname.value;
 
-    const teamState = [...this.state[team]];
+    const teamState = [...this.state[teamName]];
     const list = [...this.state.list]; 
     
-    if(team === "teamA") {
+    if(teamName === "teamA") {
       const gkState = this.state.goalkeeperA;
-      this.removePlayerGKBtnCheck(name, gkState);
-    } else if (team === "teamB") {
+      this.removePlayerGKBtnCheck(name, gkState, teamName);
+    } else if (teamName === "teamB") {
         const gkState = this.state.goalkeeperB;
-        this.removePlayerGKBtnCheck(name, gkState);
+        this.removePlayerGKBtnCheck(name, gkState, teamName);
     }
 
     teamState.splice(teamState.indexOf(name), 1);
     list.push(name);
 
-    this.setState({ [team]: teamState}, () => {this.setState({ list })}); 
+    this.setState({ [teamName]: teamState}, () => {this.setState({ list })}); 
   }
 
   handleGoalKeeperState = (e) => {
@@ -93,8 +93,8 @@ class Futbol extends Component {
     const teamName = e.target.attributes.teamname.value;
     const team = [...this.state[teamName]];
     const playerName = e.target.name;
-    const gkNoDisplayList = Array.from(document.querySelectorAll('.gkNoDisplay'));
-    const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
+    const gkNoDisplayList = Array.from(document.querySelectorAll(`.${teamName} .gkNoDisplay`));
+    const gkBtnList = Array.from(document.querySelectorAll(`.${teamName} .gk-btn`));
     
     if(gkBtnList[0].attributes.name.value === playerName && gkNoDisplayList.length > 0) { 
       for(var i = 1; i <= gkBtnList.length - 1; i++) {
@@ -102,19 +102,18 @@ class Futbol extends Component {
       }
       return;
     }
-    
- 
 
     const gkFirst = team.sort(player => {
       return player === playerName ? -1 : 1
     })
 
-    this.setState({ [teamName]: gkFirst }, this.gkBtnCheck)
+    this.setState({ [teamName]: gkFirst }, () => this.gkBtnCheck(teamName))
   }
 
-  addPlayerGKBtnCheck = (gkState) => {  
-    const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
-    const gkNoDisplayList = Array.from(document.querySelectorAll('.gkNoDisplay'));
+  addPlayerGKBtnCheck = (gkState, teamName) => {  
+    const gkBtnList = Array.from(document.querySelectorAll(`.${teamName} .gk-btn`));
+    const gkNoDisplayList = Array.from(document.querySelectorAll(`.${teamName} .gkNoDisplay`));
+    console.log('team: ', teamName)
     
     if(gkState && gkNoDisplayList.length === 1) {
       for (var i = 1; i <= gkBtnList.length - 1; i++) {
@@ -123,8 +122,8 @@ class Futbol extends Component {
     } 
   }
 
-  removePlayerGKBtnCheck = (name, gkState) => {  
-    const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
+  removePlayerGKBtnCheck = (name, gkState, teamName) => {  
+    const gkBtnList = Array.from(document.querySelectorAll(`.${teamName} .gk-btn`));
 
     if (gkState && name === gkBtnList[0].attributes.name.value) {
       gkBtnList.forEach(player => player.classList.remove('gkNoDisplay'));
@@ -132,9 +131,9 @@ class Futbol extends Component {
   }
 
 
-  gkBtnCheck = () => {  //Checks for the players that were not selected as goalkeeper, and aplyies a "display: none" styled class.
-    const gkBtnList = Array.from(document.querySelectorAll('.gk-btn'));
-    const gkNoDisplayList = Array.from(document.querySelectorAll('.gkNoDisplay'));
+  gkBtnCheck = (teamName) => {  //Checks for the players that were not selected as goalkeeper, and aplyies a "display: none" styled class.
+    const gkBtnList = Array.from(document.querySelectorAll(`.${teamName} .gk-btn`));
+    const gkNoDisplayList = Array.from(document.querySelectorAll(`.${teamName} .gkNoDisplay`));
 
     for(var i = 1; i <= gkBtnList.length - 1; i++) {
       if (gkNoDisplayList.length === 0) {
@@ -147,7 +146,6 @@ class Futbol extends Component {
   }
 
   handlePlayerNum = (e) => {
-    console.log(e.target.value)
     let numPlayers = this.state.numPlayers;
     numPlayers = Number(e.target.value);
 

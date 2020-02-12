@@ -39,7 +39,7 @@ class Equipo extends Component {
 
     return (
         <div>
-          <ul>
+          <ul className={teamName}>
             {teamItems}
           </ul>
         </div>        
